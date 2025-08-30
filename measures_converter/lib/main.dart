@@ -1,9 +1,12 @@
+// Flutter Measures Converter Application
 import 'package:flutter/material.dart';
 
+// Entry point of the application
 void main() {
   runApp(ConversionApp());
 }
 
+// Root widget that sets up the MaterialApp
 class ConversionApp extends StatelessWidget {
   const ConversionApp({super.key});
   @override
@@ -18,23 +21,26 @@ class ConversionApp extends StatelessWidget {
 class ConverterScreen extends StatefulWidget {
   const ConverterScreen({super.key});
   @override
-  _ConverterScreenState createState() => _ConverterScreenState();
+  ConverterScreenState createState() => ConverterScreenState();
 }
 
-class _ConverterScreenState extends State<ConverterScreen> {
+class ConverterScreenState extends State<ConverterScreen> {
+  // Unit selections and values
   String fromUnit = 'meters';
   String toUnit = 'feet';
   double inputValue = 100.0;
   double outputValue = 328.084;
-  
+
+  // Controller for the input TextField
   final TextEditingController _controller = TextEditingController(text: '100');
 
+  // Supported units and their categories
   final Map<String, List<String>> unitCategories = {
     'Distance': ['meters', 'feet', 'inches', 'yards', 'miles', 'kilometers', 'centimeters', 'millimeters'],
     'Weight': ['kilograms', 'pounds', 'ounces', 'grams', 'stones'],
   };
 
-  // Conversion factors to base units
+  // Conversion factors relative to a base unit (meters for distance, kilograms for weight)
   final Map<String, double> conversionFactors = {
     'meters': 1.0,
     'feet': 3.28084,
@@ -51,6 +57,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
     'stones': 0.157473,
   };
 
+  // Determine the category of a given unit
   String _getUnitCategory(String unit) {
     for (String category in unitCategories.keys) {
       if (unitCategories[category]!.contains(unit)) {
@@ -60,6 +67,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
     return '';
   }
 
+  // Get valid 'to' units based on the selected 'from' unit
   List<String> _getValidToUnits() {
     String fromCategory = _getUnitCategory(fromUnit);
     return unitCategories[fromCategory] ?? [];
@@ -67,6 +75,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
 
   List<String> get allUnits => conversionFactors.keys.toList()..sort();
 
+  // Perform the conversion based on selected units and input value
   void _performConversion() {
     String fromCategory = _getUnitCategory(fromUnit);
     String toCategory = _getUnitCategory(toUnit);
@@ -88,6 +97,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
     });
   }
 
+  // Handle changes in the input TextField
   void _onInputChanged(String value) {
     setState(() {
       inputValue = double.tryParse(value) ?? 0.0;
@@ -99,6 +109,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
     return value.toStringAsFixed(3);
   }
 
+  // Build the UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
